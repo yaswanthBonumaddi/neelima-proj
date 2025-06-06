@@ -1,16 +1,17 @@
 {
-  "functions": {
-    "api/index.js": {
-      "maxDuration": 30
-    }
-  },
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/api/index.js"
+      "src": "dist/index.js",
+      "use": "@vercel/node"
     }
   ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/dist/index.js"
+    }
+  ],
+  "buildCommand": "pnpm install && pnpm run build",
+  "installCommand": "pnpm install"
 }
