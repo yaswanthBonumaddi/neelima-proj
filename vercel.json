@@ -9,9 +9,15 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/dist/index.js"
+      "dest": "/dist"
     }
   ],
-  "buildCommand": "pnpm install && pnpm run build",
-  "installCommand": "pnpm install"
+  "env": {
+    "SUPPRESS_NO_CONFIG_WARNING": "true",
+    "POSTGRES_URL": "postgresql://postgres:postgres@172.23.0.2:5432/emp",
+    "MONGO_TEST_URL": "mongodb://username:password@mongodb1,mongodb2,mongodb3:27017/test?replicaSet=gs_service"
+  },
+  "buildCommand": "pnpm run build",
+  "installCommand": "pnpm install",
+  "outputDirectory": "dist"
 }

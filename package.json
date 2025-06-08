@@ -11,7 +11,7 @@
     "dev:default": "nodemon --watch src -e ts,js,yaml,json -r dotenv ./src/index.ts",
     "build": "run-script-os",
     "build:win32": "npm run clean && tsc --noEmit && mkdir dist && npx swc src -d dist --strip-leading-paths && copyfiles -a -u 1 \"src/**/*.!(ts)\" dist && copyfiles -a \"config/**/*\" dist && copyfiles -a -u 2 \"src/mappings/**/*\" \"dist/mappings\" && if exist README.md copy README.md dist\\ && copy tsconfig.json dist\\",
-    "build:darwin:linux": "npm run clean && tsc --noEmit && mkdir -p dist && npx swc src -d dist --strip-leading-paths && rsync -a --exclude '*.ts' ./src/ ./dist/ && rsync -a ./config/ ./dist/config/ && rsync -a ./src/mappings/ ./dist/mappings/ && rsync -a ./src/datasources/ ./dist/datasources/ && rsync -a ./src/plugins/ ./dist/plugins/ && rsync -a ./src/eventsources/ ./dist/eventsources/ && rsync -a ./src/events/ ./dist/events/ && rsync -a ./src/definitions/ ./dist/definitions/ && [ -f README.md ] && cp README.md ./dist/ || true && cp tsconfig.json ./dist/",
+    "build:darwin:linux": "npm run clean && npm run prisma-generate && tsc --noEmit && mkdir -p dist && npx swc src -d dist --strip-leading-paths && find src -type f ! -name '*.ts' -exec cp --parents {} dist \\; && cp -R config dist/ && cp -R src/mappings dist/ && cp -R src/datasources dist/ && [ -d src/plugins ] && cp -R src/plugins dist/ || true && cp -R src/eventsources dist/ && cp -R src/events dist/ && cp -R src/definitions dist/ && cp -R src/functions dist/ && [ -f README.md ] && cp README.md dist/ || true && cp tsconfig.json dist/ && cp package.json dist/ && cp .env dist/ || true",
     "build:default": "npm run clean && tsc --noEmit && rsync -a --exclude '*.ts' ./src/ ./dist/ && rsync -a ./config/ ./dist/config && rsync -a ./src/mappings/ ./dist/mappings",
     "preview": "run-script-os",
     "preview:win32": "node dist\\index.js",
@@ -24,6 +24,9 @@
     "prisma-db-push": "for i in src/datasources/*.prisma; do npx --yes prisma db push --schema $i; done;",
     "prisma-generate": "for i in src/datasources/*.prisma; do npx --yes prisma generate --schema $i; done;",
     "serve": "npm run clean && nodemon --watch src --watch config --watch mappings -e ts,js,yaml,json,.env --exec \"npm run build && npm run preview\""
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "author": "",
   "license": "ISC",
@@ -66,7 +69,7 @@
     "passport-google-oauth2": "^0.2.0",
     "passport-jwt": "^4.0.1",
     "passport-linkedin-oauth2": "^2.0.0",
-    "pino-pretty": "^13.0.0",
+    "pino-pretty": "13.0.0",
     "prisma": "^6.8.2"
   },
   "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
