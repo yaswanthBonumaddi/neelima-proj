@@ -22,6 +22,10 @@
 import { Request, Response } from 'express';
 import express from 'express';
 
+// Set environment variables for serverless compatibility
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+process.env.LOG_LEVEL = process.env.LOG_LEVEL || 'info';
+
 // Initialize OpenTelemetry if enabled
 try {
   if (process.env.OTEL_ENABLED == 'true') {
@@ -42,15 +46,20 @@ let expressApp: express.Application | null = null;
 
 async function getApp(): Promise<express.Application> {
   if (!gsApp) {
-    gsApp = new Godspeed();
-    await gsApp.initialize();
+    try {
+      gsApp = new Godspeed();
+      await gsApp.initialize();
 
-    // Get the Express app from the HTTP event source
-    const httpEventSource = gsApp.eventsources.http;
-    if (httpEventSource && httpEventSource.client) {
-      expressApp = httpEventSource.client as express.Application;
-    } else {
-      throw new Error('HTTP event source not found or not initialized');
+      // Get the Express app from the HTTP event source
+      const httpEventSource = gsApp.eventsources.http;
+      if (httpEventSource && httpEventSource.client) {
+        expressApp = httpEventSource.client as express.Application;
+      } else {
+        throw new Error('HTTP event source not found or not initialized');
+      }
+    } catch (error) {
+      console.error('Error initializing Godspeed app:', error);
+      throw error;
     }
   }
   return expressApp as express.Application;

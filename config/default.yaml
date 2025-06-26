@@ -3,11 +3,11 @@ lang: js #you can also set 'coffee'. Default is 'js'. You can set either 'coffee
 log:
   redact: # ['a.b.c', 'a.b.*', 'req.headers', 'mobileNumber'] #pino redact rules. Default null.
   log_attributes: #OTEL attributes to add in every log. by default null
-  level: debug #by default info
-  sync: true #By default sync is false. For debugging, keep it true. For performance keep it false.
-  timestamp: stdTimeFunctions.isoTime #Pino date formats
+  level: info #by default info - changed from debug to info for production
+  sync: false #By default sync is false. For debugging, keep it true. For performance keep it false.
+  timestamp: false #Disable timestamp for serverless compatibility
   bindings: # should pid and hostname be enabled in pino log bindings.
-    pid: true
-    hostname: true 
+    pid: false #Disable pid for serverless compatibility
+    hostname: false #Disable hostname for serverless compatibility
 
 SUPPRESS_NO_CONFIG_WARNING: 1
