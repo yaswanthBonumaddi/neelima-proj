@@ -17,10 +17,5 @@
   "env": {
     "NODE_ENV": "production",
     "LOG_LEVEL": "info"
-  },
-  "functions": {
-    "dist/index.js": {
-      "maxDuration": 30
-    }
   }
 }
