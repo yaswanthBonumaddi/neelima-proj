@@ -1,0 +1,28 @@
+http.get./joke:
+  summary: Get a random joke
+  operationId: getJoke
+  tags:
+    - Jokes
+  responses:
+    '200':
+      description: A random joke
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              setup:
+                type: string
+              punchline:
+                type: string
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+  x-gs-handler:
+    fn: getJoke
